@@ -88,12 +88,14 @@ namespace MyRESTfulApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IOptions<FirstConfig> firstConfig)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            // 绑定至类 使用
-            //_logger.LogInformation($"绑定至类 方式二 key1 = {firstConfig.Value.key1}");
-            //_logger.LogInformation($"绑定至类 方式二 key2 = {firstConfig.Value.key2}");
-            //_logger.LogInformation($"绑定至类 方式二 key3 = {firstConfig.Value.key3.childkey1}");
+            // 自定义异常页面
+            app.UseStatusCodePages(async context =>
+            {
+                context.HttpContext.Response.ContentType = "text/plain";
+                await context.HttpContext.Response.WriteAsync($"My Status page, status code is {context.HttpContext.Response.StatusCode}");
+            });
 
             if (env.IsDevelopment())
             {
@@ -114,7 +116,7 @@ namespace MyRESTfulApi
                 // 在根域名中启动 Swagger UI, 设置 RoutePrefix = ''
                 c.RoutePrefix = string.Empty;
             });
-
+            // 启动HTTPS，将HTTP请求重定向到HTTPS
             app.UseHttpsRedirection();
             app.UseMvc();
         }
