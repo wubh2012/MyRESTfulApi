@@ -19,6 +19,11 @@ namespace MyRESTfulApi
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    config.AddJsonFile("firstConfig.json", optional: true, reloadOnChange: true);
+                    config.AddJsonFile("secondConfig.json", optional: true, reloadOnChange: true);
+                })
                 .UseStartup<Startup>();
     }
 }

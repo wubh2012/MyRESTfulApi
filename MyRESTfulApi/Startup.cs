@@ -9,7 +9,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using MyRESTfulApi.Config;
 using MyRESTfulApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -17,18 +21,44 @@ namespace MyRESTfulApi
 {
     public class Startup
     {
+        public Startup(IConfiguration configuration, ILogger<Startup> logger)
+        {
+            Configuration = configuration;
+            _logger = logger;
+        }
+        private readonly ILogger _logger;
+        public IConfiguration Configuration { get; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddRouting();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            // 单个读取
+
+            _logger.LogInformation($"GetSection.Value key1 = {Configuration.GetSection("key1").Value}");
+            _logger.LogInformation($"等价于 GetValue key1 = {Configuration.GetValue<string>("key1")}");
+            _logger.LogInformation($"key2 = {Configuration.GetSection("key2").Value}");
+            _logger.LogInformation($"childkey1 = {Configuration.GetSection("key3:childkey1").Value}");
+
+
+            // 绑定至类 方式一
+            var secondConfig = new SecondConfig();
+            Configuration.GetSection("second").Bind(secondConfig);
+            _logger.LogInformation($"绑定至类 方式一 second.name = {secondConfig.name}");
+            _logger.LogInformation($"绑定至类 方式一 second.email = {secondConfig.email}");
+            // 遇到了获取中文乱码问题，默认使用 VS 创建的 json 文件编码方式不是 UTF-8 导致乱码
+            _logger.LogInformation($"绑定至类 方式一 second.address = {secondConfig.address}");
+
+            // 绑定至类 方式二
+            services.Configure<FirstConfig>(Configuration);
+
+            // 添加 DbContext
             services.AddDbContext<TodoContext>(opt =>
             {
                 opt.UseInMemoryDatabase("TodoList");
             });
 
-            // Register the Swagger generator, defining 1 or more Swagger documents
+            // 添加 Swagger 文档支持
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info
@@ -54,11 +84,17 @@ namespace MyRESTfulApi
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IOptions<FirstConfig> firstConfig)
         {
+            // 绑定至类 使用
+            //_logger.LogInformation($"绑定至类 方式二 key1 = {firstConfig.Value.key1}");
+            //_logger.LogInformation($"绑定至类 方式二 key2 = {firstConfig.Value.key2}");
+            //_logger.LogInformation($"绑定至类 方式二 key3 = {firstConfig.Value.key3.childkey1}");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -79,6 +115,7 @@ namespace MyRESTfulApi
                 c.RoutePrefix = string.Empty;
             });
 
+            app.UseHttpsRedirection();
             app.UseMvc();
         }
     }

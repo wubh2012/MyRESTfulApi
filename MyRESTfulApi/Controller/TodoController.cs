@@ -9,6 +9,7 @@ using MyRESTfulApi.Models;
 
 namespace MyRESTfulApi.Controller
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class TodoController : ControllerBase
