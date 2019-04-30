@@ -33,6 +33,7 @@ namespace MyRestful.Api.Controller
         [HttpGet]
         public async Task<IActionResult> Get()
         {
+            // throw new Exception("test");
             var newCountry = new Country()
             {
                 ChineseName = "俄罗斯",
