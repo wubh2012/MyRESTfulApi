@@ -2,6 +2,7 @@
 using MyRestful.Api.Models;
 using MyRestful.Api.ViewModel;
 using MyRestful.Core;
+using MyRestful.Core.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
