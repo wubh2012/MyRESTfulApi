@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MyRestful.Core
+namespace MyRestful.Core.Entity
 {
     public class TodoItem
     {

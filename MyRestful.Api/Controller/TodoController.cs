@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyRestful.Core;
+using MyRestful.Core.Entity;
 using MyRestful.Infrastructure;
 using System.Collections.Generic;
 using System.Linq;

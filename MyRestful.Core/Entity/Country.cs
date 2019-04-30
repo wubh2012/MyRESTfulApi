@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyRestful.Core
+namespace MyRestful.Core.Entity
 {
     public class Country
     {

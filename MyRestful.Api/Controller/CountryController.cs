@@ -8,7 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyRestful.Api.Models;
 using MyRestful.Api.ViewModel;
+using MyRestful.Core;
+using MyRestful.Core.Entity;
+using MyRestful.Core.Interface;
 using MyRestful.Infrastructure;
+using MyRestful.Infrastructure.Repository;
 
 namespace MyRestful.Api.Controller
 {
@@ -16,20 +20,37 @@ namespace MyRestful.Api.Controller
     [ApiController]
     public class CountryController : ControllerBase
     {
-        private readonly MyContext _context;
+        private readonly ICountryRepository _countryRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public CountryController(MyContext context, IMapper mapper)
+        public CountryController(IUnitOfWork unitOfWork, ICountryRepository repository, IMapper mapper)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
+            _countryRepository = repository;
             _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var countries = await _context.Countries.ToListAsync();
+            var newCountry = new Country()
+            {
+                ChineseName = "俄罗斯",
+                EnglishName = "Russia",
+                Abbreviation = "Russia"
+            };
+            _countryRepository.AddCountry(newCountry);
+            await _unitOfWork.SaveAsync();
+
+            var countries = await _countryRepository.GetCountriesAsync();
             var countryVMs = _mapper.Map<List<CountryVM>>(countries);
             return Ok(countryVMs);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add()
+        {
+            return Ok();
         }
     }
 }

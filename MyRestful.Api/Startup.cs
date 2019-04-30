@@ -16,7 +16,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MyRestful.Api.Config;
 using MyRestful.Api.Models;
+using MyRestful.Core.Interface;
 using MyRestful.Infrastructure;
+using MyRestful.Infrastructure.Repository;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace MyRestful.Api
@@ -35,6 +37,8 @@ namespace MyRestful.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            #region 读取配置文件
+
             // 单个读取
             _logger.LogInformation($"GetSection.Value key1 = {Configuration.GetSection("key1").Value}");
             _logger.LogInformation($"等价于 GetValue key1 = {Configuration.GetValue<string>("key1")}");
@@ -51,10 +55,16 @@ namespace MyRestful.Api
 
             // 绑定至类 方式二
             services.Configure<FirstConfig>(Configuration);
+            #endregion
 
+            services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddAutoMapper(typeof(Startup)); // newer automapper version uses this signature
             // 添加 DbContext
             services.AddDbContext<MyContext>(opt =>
             {
+                // 使用内存数据库
                 opt.UseInMemoryDatabase("MyDatabase");
             });
 
@@ -85,7 +95,6 @@ namespace MyRestful.Api
                 c.IncludeXmlComments(xmlPath);
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddAutoMapper(typeof(Startup)); // newer automapper version uses this signature
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
