@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using MyRESTfulApi.Config;
+using MyRestful.Api.Config;
 
-namespace MyRESTfulApi.Controller
+namespace MyRestful.Api.Controller
 {
     [Route("api/[controller]")]
     [ApiController]

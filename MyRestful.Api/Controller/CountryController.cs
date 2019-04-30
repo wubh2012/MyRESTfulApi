@@ -6,10 +6,11 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MyRESTfulApi.Models;
-using MyRESTfulApi.ViewModel;
+using MyRestful.Api.Models;
+using MyRestful.Api.ViewModel;
+using MyRestful.Infrastructure;
 
-namespace MyRESTfulApi.Controller
+namespace MyRestful.Api.Controller
 {
     [Route("api/[controller]")]
     [ApiController]

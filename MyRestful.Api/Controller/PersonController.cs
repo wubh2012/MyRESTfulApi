@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyRESTfulApi.Models;
+using MyRestful.Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyRESTfulApi.Controller
+namespace MyRestful.Api.Controller
 {
     [Route("api/[controller]")]
     [ApiController]

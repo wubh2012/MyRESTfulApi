@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MyRESTfulApi.Models
+namespace MyRestful.Core
 {
     public class TodoItem
     {

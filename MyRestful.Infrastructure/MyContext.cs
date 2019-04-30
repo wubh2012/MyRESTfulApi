@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MyRestful.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyRESTfulApi.Models
+namespace MyRestful.Infrastructure
 {
     public class MyContext : DbContext
     {

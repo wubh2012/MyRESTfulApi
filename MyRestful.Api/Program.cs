@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MyRESTfulApi.Models;
+using MyRestful.Infrastructure;
 
-namespace MyRESTfulApi
+namespace MyRestful.Api
 {
     public class Program
     {

@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using MyRESTfulApi.Models;
-using MyRESTfulApi.ViewModel;
+using MyRestful.Api.ViewModel;
+using MyRestful.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyRESTfulApi.Configuration
+namespace MyRestful.Api.Configuration
 {
     public class ViewModelToDomainMappingProfile : Profile
     {

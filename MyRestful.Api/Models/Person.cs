@@ -1,4 +1,4 @@
-﻿namespace MyRESTfulApi.Models
+﻿namespace MyRestful.Api.Models
 {
     public class Person
     {

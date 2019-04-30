@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyRESTfulApi.ViewModel
+namespace MyRestful.Core
 {
-    public class CountryVM
+    public class Country
     {
         public int Id { get; set; }
         public string EnglishName { get; set; }
