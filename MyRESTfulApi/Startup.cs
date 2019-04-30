@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -34,12 +35,10 @@ namespace MyRESTfulApi
         public void ConfigureServices(IServiceCollection services)
         {
             // 单个读取
-
             _logger.LogInformation($"GetSection.Value key1 = {Configuration.GetSection("key1").Value}");
             _logger.LogInformation($"等价于 GetValue key1 = {Configuration.GetValue<string>("key1")}");
             _logger.LogInformation($"key2 = {Configuration.GetSection("key2").Value}");
             _logger.LogInformation($"childkey1 = {Configuration.GetSection("key3:childkey1").Value}");
-
 
             // 绑定至类 方式一
             var secondConfig = new SecondConfig();
@@ -85,6 +84,7 @@ namespace MyRESTfulApi
                 c.IncludeXmlComments(xmlPath);
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddAutoMapper(typeof(Startup)); // newer automapper version uses this signature
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
