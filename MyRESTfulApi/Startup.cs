@@ -53,9 +53,9 @@ namespace MyRESTfulApi
             services.Configure<FirstConfig>(Configuration);
 
             // 添加 DbContext
-            services.AddDbContext<TodoContext>(opt =>
+            services.AddDbContext<MyContext>(opt =>
             {
-                opt.UseInMemoryDatabase("TodoList");
+                opt.UseInMemoryDatabase("MyDatabase");
             });
 
             // 添加 Swagger 文档支持

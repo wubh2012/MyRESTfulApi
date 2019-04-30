@@ -14,29 +14,29 @@ namespace MyRESTfulApi.Controller
     [ApiController]
     public class TodoController : ControllerBase
     {
-        private readonly TodoContext _todoContext;
-        public TodoController(TodoContext todoContext)
+        private readonly MyContext _context;
+        public TodoController(MyContext context)
         {
-            _todoContext = todoContext;
-            if (_todoContext.TodoItems.Count() == 0)
+            _context = context;
+            if (_context.TodoItems.Count() == 0)
             {
                 // Create a new TodoItem if collection is empty,
                 // which means you can't delete all TodoItems.
-                _todoContext.TodoItems.Add(new TodoItem { Name = "Item1" });
-                _todoContext.SaveChanges();
+                _context.TodoItems.Add(new TodoItem { Name = "Item1" });
+                _context.SaveChanges();
             }
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
         {
-            return await _todoContext.TodoItems.ToListAsync();
+            return await _context.TodoItems.ToListAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<TodoItem>> GetTodoItem(long id)
         {
-            var todoItem = await _todoContext.TodoItems.FindAsync(id);
+            var todoItem = await _context.TodoItems.FindAsync(id);
             if (todoItem == null)
             {
                 return NotFound();
@@ -47,8 +47,8 @@ namespace MyRESTfulApi.Controller
         [HttpPost]
         public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem item)
         {
-            _todoContext.TodoItems.Add(item);
-            await _todoContext.SaveChangesAsync();
+            _context.TodoItems.Add(item);
+            await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetTodoItem), new { id = item.Id }, item);
         }
 
@@ -59,8 +59,8 @@ namespace MyRESTfulApi.Controller
             {
                 return BadRequest();
             }
-            _todoContext.Entry(item).State = EntityState.Modified;
-            await _todoContext.SaveChangesAsync();
+            _context.Entry(item).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
             return NoContent();
         }
 
@@ -72,13 +72,13 @@ namespace MyRESTfulApi.Controller
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTodoItem(long id)
         {
-            var todoItem = await _todoContext.TodoItems.FindAsync(id);
+            var todoItem = await _context.TodoItems.FindAsync(id);
             if (todoItem == null)
             {
                 return NotFound();
             }
-            _todoContext.TodoItems.Remove(todoItem);
-            await _todoContext.SaveChangesAsync();
+            _context.TodoItems.Remove(todoItem);
+            await _context.SaveChangesAsync();
             return NoContent();
         }
 
