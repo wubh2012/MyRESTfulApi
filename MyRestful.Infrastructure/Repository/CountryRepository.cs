@@ -26,5 +26,10 @@ namespace MyRestful.Infrastructure.Repository
         {
             return await _myContext.Countries.ToListAsync();
         }
+
+        public async Task<Country> GetCountryByIdAsync(int id)
+        {
+            return await _myContext.Countries.FindAsync(id);
+        }
     }
 }

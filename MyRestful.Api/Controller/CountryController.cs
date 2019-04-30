@@ -46,6 +46,18 @@ namespace MyRestful.Api.Controller
             var countryVMs = _mapper.Map<List<CountryVM>>(countries);
             return Ok(countryVMs);
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCountry(int id)
+        {
+            
+            var country = await _countryRepository.GetCountryByIdAsync(id);
+            if (country == null)
+            {
+                return NotFound();
+            }
+            var countryVM = _mapper.Map<CountryVM>(country);
+            return Ok(country);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Add()

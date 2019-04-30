@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using MyRestful.Core;
+using MyRestful.Core.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
