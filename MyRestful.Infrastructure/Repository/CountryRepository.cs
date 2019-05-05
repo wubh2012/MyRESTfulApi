@@ -4,6 +4,7 @@ using MyRestful.Core.Entity;
 using MyRestful.Core.Interface;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,6 +31,11 @@ namespace MyRestful.Infrastructure.Repository
         public async Task<IEnumerable<Country>> GetCountriesAsync()
         {
             return await _myContext.Countries.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Country>> GetCountriesAsync(IEnumerable<int> ids)
+        {
+            return await _myContext.Countries.Where(x => ids.Contains(x.Id)).ToListAsync();
         }
 
         public async Task<Country> GetCountryByIdAsync(int id)
