@@ -60,10 +60,5 @@ namespace MyRestful.Api.Controller
             return Ok(country);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add()
-        {
-            return Ok();
-        }
     }
 }

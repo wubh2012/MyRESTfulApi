@@ -58,6 +58,7 @@ namespace MyRestful.Api
             #endregion
 
             services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<ICityRepository, CityRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddAutoMapper(typeof(Startup)); // newer automapper version uses this signature
@@ -73,7 +74,7 @@ namespace MyRestful.Api
             {
                 c.SwaggerDoc("v1", new Info
                 {
-                    Title = "Todo API",
+                    Title = "MyRestful API",
                     Version = "v1",
                     Description = "A simple example ASP.NET Core Web API",
                     TermsOfService = "None",

@@ -17,5 +17,6 @@ namespace MyRestful.Infrastructure
 
         public DbSet<TodoItem> TodoItems { get; set; }
         public DbSet<Country> Countries { get; set; }
+        public DbSet<City> Cities { get; set; }
     }
 }

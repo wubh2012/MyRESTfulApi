@@ -22,6 +22,11 @@ namespace MyRestful.Infrastructure.Repository
             _myContext.Countries.Add(newCountry);
         }
 
+        public async Task<bool> CountryExistsAsync(int countryId)
+        {
+            return await _myContext.Countries.AnyAsync(m => m.Id == countryId);
+        }
+
         public async Task<IEnumerable<Country>> GetCountriesAsync()
         {
             return await _myContext.Countries.ToListAsync();

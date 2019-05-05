@@ -14,5 +14,6 @@ namespace MyRestful.Core.Entity
         /// 缩写
         /// </summary>
         public string Abbreviation { get; set; }
+        public ICollection<City> Cities { get; set; }
     }
 }
