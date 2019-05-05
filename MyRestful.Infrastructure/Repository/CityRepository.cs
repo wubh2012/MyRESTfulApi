@@ -16,6 +16,13 @@ namespace MyRestful.Api
         {
             _myContext = myContext;
         }
+
+        public void AddCity(int countryId, City cityModel)
+        {
+            cityModel.CountryId = countryId;
+            _myContext.Cities.Add(cityModel);
+        }
+
         public async Task<List<City>> GetCityForCountryAsync(int countryId)
         {
             return await _myContext.Cities.Where(m => m.CountryId == countryId).ToListAsync();

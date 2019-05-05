@@ -61,6 +61,7 @@ namespace MyRestful.Api
             services.AddScoped<ICityRepository, CityRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            // 添加 AutoMapper 支持
             services.AddAutoMapper(typeof(Startup)); // newer automapper version uses this signature
             // 添加 DbContext
             services.AddDbContext<MyContext>(opt =>

@@ -29,7 +29,10 @@ namespace MyRestful.Api.Controller
             _countryRepository = repository;
             _mapper = mapper;
         }
-
+        /// <summary>
+        /// 获取所有国家
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -47,10 +50,15 @@ namespace MyRestful.Api.Controller
             var countryVMs = _mapper.Map<List<CountryVM>>(countries);
             return Ok(countryVMs);
         }
+        /// <summary>
+        /// 获取单个国家
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCountry(int id)
         {
-            
+
             var country = await _countryRepository.GetCountryByIdAsync(id);
             if (country == null)
             {
@@ -59,6 +67,30 @@ namespace MyRestful.Api.Controller
             var countryVM = _mapper.Map<CountryVM>(country);
             return Ok(country);
         }
+        /// <summary>
+        /// 创建国家
+        /// </summary>
+        /// <param name="country"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> CreateCountry([FromBody]CountryAddVM country)
+        {
+            if (country == null)
+            {
+                return BadRequest();
+            }
+            var countryModel = _mapper.Map<Country>(country);
+            _countryRepository.AddCountry(countryModel);
+            if (!await _unitOfWork.SaveAsync())
+            {
+                return StatusCode(500, "数据添加失败!");
+            }
+            var countryVM = _mapper.Map<CountryVM>(countryModel);
+            return CreatedAtAction(nameof(GetCountry), new { id = countryVM.Id }, countryVM);
+
+        }
+
+
 
     }
 }

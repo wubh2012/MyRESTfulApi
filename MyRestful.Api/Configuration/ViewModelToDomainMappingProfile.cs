@@ -15,6 +15,8 @@ namespace MyRestful.Api.Configuration
         public ViewModelToDomainMappingProfile()
         {
             CreateMap<CountryVM, Country>();
+            CreateMap<CountryAddVM, Country>();
+            CreateMap<CityAddVM, City>();
         }
     }
 }

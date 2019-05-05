@@ -17,6 +17,7 @@ namespace MyRestful.Api.Configuration
         public DomainToResourceMappingProfile()
         {
             CreateMap<Country, CountryVM>();
+            CreateMap<City, CityVM>();
         }
     }
 }
