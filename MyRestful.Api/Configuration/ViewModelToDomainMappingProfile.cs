@@ -17,6 +17,7 @@ namespace MyRestful.Api.Configuration
             CreateMap<CountryVM, Country>();
             CreateMap<CountryAddVM, Country>();
             CreateMap<CityAddVM, City>();
+            CreateMap<CityUpdateVM, City>();
         }
     }
 }

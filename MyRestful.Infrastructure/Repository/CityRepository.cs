@@ -37,5 +37,10 @@ namespace MyRestful.Api
         {
             return await _myContext.Cities.SingleOrDefaultAsync(m => m.CountryId == countryId && m.Id == cityId);
         }
+
+        public void UpdateCityForCountry(City city)
+        {
+            _myContext.Cities.Update(city);
+        }
     }
 }

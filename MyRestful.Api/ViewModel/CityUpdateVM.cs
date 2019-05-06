@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 
 namespace MyRestful.Api.ViewModel
 {
-    public class CityVM
+    public class CityUpdateVM
     {
-        public int Id { get; set; }
-        public int CountryId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }
