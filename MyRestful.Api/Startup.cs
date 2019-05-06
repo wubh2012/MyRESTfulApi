@@ -45,16 +45,7 @@ namespace MyRestful.Api
             _logger.LogInformation($"key2 = {Configuration.GetSection("key2").Value}");
             _logger.LogInformation($"childkey1 = {Configuration.GetSection("key3:childkey1").Value}");
 
-            // 绑定至类 方式一
-            var secondConfig = new SecondConfig();
-            Configuration.GetSection("second").Bind(secondConfig);
-            _logger.LogInformation($"绑定至类 方式一 second.name = {secondConfig.name}");
-            _logger.LogInformation($"绑定至类 方式一 second.email = {secondConfig.email}");
-            // 遇到了获取中文乱码问题，默认使用 VS 创建的 json 文件编码方式不是 UTF-8 导致乱码
-            _logger.LogInformation($"绑定至类 方式一 second.address = {secondConfig.address}");
 
-            // 绑定至类 方式二
-            services.Configure<FirstConfig>(Configuration);
             #endregion
 
             services.AddScoped<ICountryRepository, CountryRepository>();
@@ -64,10 +55,12 @@ namespace MyRestful.Api
             // 添加 AutoMapper 支持
             services.AddAutoMapper(typeof(Startup)); // newer automapper version uses this signature
             // 添加 DbContext
+            var sqliteConnectionStr = Configuration.GetSection("ConnectionString:sqlite").Value;
+            _logger.LogDebug($"当前 sqlite 连接字符串 = {sqliteConnectionStr}");
             services.AddDbContext<MyContext>(opt =>
             {
-                // 使用内存数据库
-                opt.UseInMemoryDatabase("MyDatabase");
+                // 使用 sqlite 数据库
+                opt.UseSqlite(sqliteConnectionStr);
             });
 
             // 添加 Swagger 文档支持
