@@ -28,6 +28,11 @@ namespace MyRestful.Infrastructure.Repository
             return await _myContext.Countries.AnyAsync(m => m.Id == countryId);
         }
 
+        public void DeleteCountry(Country country)
+        {
+            _myContext.Countries.Remove(country);
+        }
+
         public async Task<IEnumerable<Country>> GetCountriesAsync()
         {
             return await _myContext.Countries.ToListAsync();

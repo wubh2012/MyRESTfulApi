@@ -23,6 +23,11 @@ namespace MyRestful.Api
             _myContext.Cities.Add(cityModel);
         }
 
+        public void DeleteCity(City city)
+        {
+            _myContext.Cities.Remove(city);
+        }
+
         public async Task<List<City>> GetCityForCountryAsync(int countryId)
         {
             return await _myContext.Cities.Where(m => m.CountryId == countryId).ToListAsync();

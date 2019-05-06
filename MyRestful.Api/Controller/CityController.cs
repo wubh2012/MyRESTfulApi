@@ -90,7 +90,27 @@ namespace MyRestful.Api.Controller
                 return StatusCode(500, "添加数据失败");
             }
             var cityVM = _mapper.Map<CityVM>(cityModel);
-            return CreatedAtAction(nameof(GetCity), new { countryId = countryId, cityId = cityVM.Id }, cityVM);
+            return CreatedAtAction(nameof(GetCity), new { countryId, cityId = cityVM.Id }, cityVM);
+        }
+
+        [HttpDelete("{cityId}")]
+        public async Task<IActionResult> DeleteCityForCountry(int countryId, int cityId)
+        {
+            if (!await _countryRepository.CountryExistsAsync(countryId))
+            {
+                return NotFound();
+            }
+            var city = await _cityRepository.GetCityForCountryAsync(countryId, cityId);
+            if (city == null)
+            {
+                return NotFound();
+            }
+            _cityRepository.DeleteCity(city);
+            if (!await _unitOfWork.SaveAsync())
+            {
+                return StatusCode(500, $"删除 country:{countryId} 下的 city:{cityId}失败");
+            }
+            return NoContent();
 
         }
     }

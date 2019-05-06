@@ -65,7 +65,7 @@ namespace MyRestful.Api.Controller
                 return NotFound();
             }
             var countryVM = _mapper.Map<CountryVM>(country);
-            return Ok(country);
+            return Ok(countryVM);
         }
         /// <summary>
         /// 创建国家
@@ -87,9 +87,23 @@ namespace MyRestful.Api.Controller
             }
             var countryVM = _mapper.Map<CountryVM>(countryModel);
             return CreatedAtAction(nameof(GetCountry), new { id = countryVM.Id }, countryVM);
-
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCountry(int id)
+        {
+            var country = await _countryRepository.GetCountryByIdAsync(id);
+            if (country == null)
+            {
+                return NotFound();
+            }
+            _countryRepository.DeleteCountry(country);
+            if (!await _unitOfWork.SaveAsync())
+            {
+                return StatusCode(500, $"删除数据 country:{id} 添加失败!");
+            }
+            return NoContent();
+        }
 
 
     }

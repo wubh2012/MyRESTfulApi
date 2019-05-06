@@ -25,7 +25,7 @@ namespace MyRestful.Api.Helper
                 bindingContext.Result = ModelBindingResult.Success(null);
                 return Task.CompletedTask;
             }
-
+            
             var elementType = bindingContext.ModelType.GenericTypeArguments[0];
             var converter = TypeDescriptor.GetConverter(elementType);
 

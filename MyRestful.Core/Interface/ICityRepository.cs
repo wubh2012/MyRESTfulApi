@@ -11,5 +11,6 @@ namespace MyRestful.Core.Interface
         Task<City> GetCityForCountryAsync(int countryId, int cityId);
         Task<List<City>> GetCityForCountryAsync(int countryId);
         void AddCity(int countryId, City cityModel);
+        void DeleteCity(City city);
     }
 }
