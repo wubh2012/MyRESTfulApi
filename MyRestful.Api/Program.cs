@@ -9,6 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MyRestful.Infrastructure;
+using Serilog.Events;
+using Serilog.Core;
+using Serilog;
 
 namespace MyRestful.Api
 {
@@ -43,6 +46,8 @@ namespace MyRestful.Api
                     config.AddJsonFile("firstConfig.json", optional: true, reloadOnChange: true);
                     config.AddJsonFile("secondConfig.json", optional: true, reloadOnChange: true);
                 })
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .UseSerilog();
+
     }
 }

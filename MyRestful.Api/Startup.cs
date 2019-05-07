@@ -23,6 +23,8 @@ using MyRestful.Api.ViewModel;
 using MyRestful.Core.Interface;
 using MyRestful.Infrastructure;
 using MyRestful.Infrastructure.Repository;
+using Serilog;
+using Serilog.Events;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace MyRestful.Api
@@ -34,20 +36,30 @@ namespace MyRestful.Api
             Configuration = configuration;
             _logger = logger;
         }
-        private readonly ILogger _logger;
+
+        private readonly Microsoft.Extensions.Logging.ILogger _logger;
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            // 配置 Serilog
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .WriteTo.File(Path.Combine("Logs", "log-.txt"), rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
             #region 读取配置文件
 
             // 单个读取
-            _logger.LogInformation($"GetSection.Value key1 = {Configuration.GetSection("key1").Value}");
-            _logger.LogInformation($"等价于 GetValue key1 = {Configuration.GetValue<string>("key1")}");
-            _logger.LogInformation($"key2 = {Configuration.GetSection("key2").Value}");
-            _logger.LogInformation($"childkey1 = {Configuration.GetSection("key3:childkey1").Value}");
+            Log.Information($"GetSection.Value key1 = {Configuration.GetSection("key1").Value}");
+            Log.Information($"等价于 GetValue key1 = {Configuration.GetValue<string>("key1")}");
+            Log.Information($"key2 = {Configuration.GetSection("key2").Value}");
+            Log.Information($"childkey1 = {Configuration.GetSection("key3:childkey1").Value}");
 
 
             #endregion
@@ -62,7 +74,7 @@ namespace MyRestful.Api
             services.AddAutoMapper(typeof(Startup)); // newer automapper version uses this signature
             // 添加 DbContext
             var sqliteConnectionStr = Configuration.GetSection("ConnectionString:sqlite").Value;
-            _logger.LogDebug($"当前 sqlite 连接字符串 = {sqliteConnectionStr}");
+            Log.Debug($"当前 sqlite 连接字符串 = {sqliteConnectionStr}");
             services.AddDbContext<MyContext>(opt =>
             {
                 // 使用 sqlite 数据库
