@@ -5,6 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +18,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MyRestful.Api.Config;
 using MyRestful.Api.Models;
+using MyRestful.Api.Validator;
+using MyRestful.Api.ViewModel;
 using MyRestful.Core.Interface;
 using MyRestful.Infrastructure;
 using MyRestful.Infrastructure.Repository;
@@ -48,9 +52,11 @@ namespace MyRestful.Api
 
             #endregion
 
+            #region 依赖注入
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<ICityRepository, CityRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            #endregion
 
             // 添加 AutoMapper 支持
             services.AddAutoMapper(typeof(Startup)); // newer automapper version uses this signature
@@ -89,18 +95,29 @@ namespace MyRestful.Api
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddFluentValidation(fv =>
+                {
+                    //方式一：程序集引入方式，这样就不用一个个的去手动添加了
+                    //fv.RegisterValidatorsFromAssemblyContaining<Startup>();
+                });
+
+            // 方式二：手动添加 FluentValidation 验证
+            services.AddTransient<IValidator<CityAddVM>, CityAddOrUpdateValidator<CityAddVM>>();
+            services.AddTransient<IValidator<CityUpdateVM>, CityAddOrUpdateValidator<CityUpdateVM>>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             // 自定义异常页面
-            app.UseStatusCodePages(async context =>
-            {
-                context.HttpContext.Response.ContentType = "text/plain";
-                await context.HttpContext.Response.WriteAsync($"My Status page, status code is {context.HttpContext.Response.StatusCode}");
-            });
+            //app.UseStatusCodePages(async context =>
+            //{
+            //    context.HttpContext.Response.ContentType = "text/plain";
+            //    await context.HttpContext.Response.WriteAsync($"My Status page, status code is {context.HttpContext.Response.StatusCode}");
+            //});
 
             if (env.IsDevelopment())
             {

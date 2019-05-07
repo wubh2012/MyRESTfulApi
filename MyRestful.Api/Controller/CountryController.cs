@@ -88,7 +88,11 @@ namespace MyRestful.Api.Controller
             var countryVM = _mapper.Map<CountryVM>(countryModel);
             return CreatedAtAction(nameof(GetCountry), new { id = countryVM.Id }, countryVM);
         }
-
+        /// <summary>
+        /// 删除国家
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCountry(int id)
         {

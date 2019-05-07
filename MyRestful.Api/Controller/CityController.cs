@@ -80,6 +80,14 @@ namespace MyRestful.Api.Controller
                 return BadRequest();
             }
 
+            // 验证
+            if (!ModelState.IsValid)
+            {
+                // 验证不通过时返回 422 状态，表示请求的格式没有问题，但是语义有错误，比如实体验证错误。
+                return new UnprocessableEntityObjectResult(ModelState);
+            }
+
+
             if (!await _countryRepository.CountryExistsAsync(countryId))
             {
                 return NotFound();
